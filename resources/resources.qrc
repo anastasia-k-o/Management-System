@@ -1,0 +1,29 @@
+<RCC>
+  <qresource prefix="document-new">
+    <file>document-new.svg</file>
+  </qresource>
+  <qresource prefix="view">
+    <file>view.svg</file>
+  </qresource>
+  <qresource prefix="checkmark">
+    <file>checkmark.svg</file>
+  </qresource>
+  <qresource prefix="logo">
+    <file>logo.png</file>
+  </qresource>
+  <qresource prefix="document-edit">
+    <file>document-edit.svg</file>
+  </qresource>
+  <qresource prefix="seek-backward">
+    <file>seek-backward.svg</file>
+  </qresource>
+  <qresource prefix="seek-forward">
+    <file>seek-forward.svg</file>
+  </qresource>
+  <qresource prefix="go-previous">
+    <file>go-previous.svg</file>
+  </qresource>
+  <qresource prefix="edit-delete">
+    <file>edit-delete.svg</file>
+  </qresource>
+</RCC>

@@ -1,0 +1,7 @@
+**/__pycache__/
+venv
+basedap
+build/
+dist/
+main.spec
+gnu_abp_app
