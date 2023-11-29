@@ -1,5 +1,5 @@
 import os
-from datetime import date
+from datetime import date, datetime
 
 from sqlalchemy import create_engine, insert, text
 
@@ -9,7 +9,7 @@ from nto.models.tables import (
     events_table,
     labor_requests_table,
     labor_types_table,
-    rooms_table,
+    rooms_table, booking_table,
 )
 from nto.utils.get_path import get_appdata
 
@@ -159,6 +159,20 @@ def fill_initial_data() -> None:
         },
     ]
 
+    _initial_booking = [
+        {
+            "date_registration":date(2023,11,20),
+            "room_id": 2,
+            "event_id": 1,
+            "date_start": datetime(2023, 11, 20,14,00,00),
+            "date_end": datetime(2023, 11, 23,18,00,00),
+
+            "description": "Установить декорации в сказочном стиле",
+        },
+
+    ]
+
+
     dataver_path = get_appdata("data_version")
     if not os.path.exists(dataver_path):
         f = open(dataver_path, "w")
@@ -182,8 +196,13 @@ def fill_initial_data() -> None:
         for x in _initial_labor_requests:
             conn.execute(insert(labor_requests_table).values(x))
 
+    if dataver<3:
+        for x in _initial_booking:
+            conn.execute(insert(booking_table).values(x))
+
+
     f = open(dataver_path, "w")
-    f.write("2")  # максимальная версия, менять с каждым дефолтным заполнением
+    f.write("3")  # максимальная версия, менять с каждым дефолтным заполнением
     f.close()
 
     conn.commit()

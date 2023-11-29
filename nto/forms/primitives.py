@@ -1,11 +1,11 @@
-from datetime import date
+from datetime import date, datetime
 from typing import Any, Dict
 
 from PyQt5.QtCore import QDate
 from PyQt5.QtGui import QStandardItem, QStandardItemModel
 from PyQt5.QtWidgets import (QComboBox, QDateEdit, QDialog, QHBoxLayout,
                              QLineEdit, QMessageBox, QPushButton, QSizePolicy,
-                             QTextEdit, QVBoxLayout, QWidget)
+                             QTextEdit, QVBoxLayout, QWidget, QDateTimeEdit)
 
 from nto.forms.compiled.relation_table_chooser import Ui_RelationTableView
 
@@ -297,3 +297,37 @@ class RecordEditorPrimitiveRelation(RecordEditorPrimitive):
 
     def get_value(self) -> int:
         return self.data
+
+
+
+class RecordEditorPrimitiveDateTime(RecordEditorPrimitive):
+    def __init__(self, name="", initial_data=datetime) -> None:
+        super().__init__()
+
+        layout = QVBoxLayout(self)
+
+        self.name = name
+        self.date = QDateTimeEdit()
+        self.date.setCalendarPopup(True)
+        if not initial_data:
+            initial_data = datetime.today()
+
+        self.date.setDateTime(
+                initial_data
+        )
+
+        layout.addWidget(self.date)
+
+        layout.setContentsMargins(0, 0, 0, 0)
+
+    def set_schema(self, schema={}) -> None:
+        super().set_schema(schema)
+
+        self.date.setReadOnly(self.schema.get("read_only", False))
+
+    def get_value(self) -> date:
+        d = self.date.date()
+        t = self.date.time()
+
+        return datetime(d.year(), d.month(), d.day(), t.hour(), t.minute(), t.second())
+

@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Date, ForeignKey, Integer, String, Table
+from sqlalchemy import Column, Date,DateTime, ForeignKey, Integer, String, Table
 
 from nto.models.meta import meta
 
@@ -45,4 +45,18 @@ labor_requests_table = Table(
     Column("room_id", ForeignKey("rooms.id", ondelete="RESTRICT")),
     Column("event_id", ForeignKey("events.id", ondelete="RESTRICT")),
     Column("labor_type_id", ForeignKey("labor_types.id", ondelete="RESTRICT")),
+)
+
+booking_table = Table(
+"booking",
+    meta,
+Column("date_registration", Date),
+    Column("id", Integer, primary_key=True),
+    Column("room_id", ForeignKey("rooms.id", ondelete="RESTRICT")),
+    Column("event_id", ForeignKey("events.id", ondelete="RESTRICT")),
+    Column("date_start", DateTime),
+    Column("date_end", DateTime),
+    Column("description", String),
+
+
 )

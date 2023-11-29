@@ -88,7 +88,7 @@ class TableViewScreen(QWidget, Ui_TableView):
         self.setupUi(self)
 
         self.ViewNameText.setText(title)
-
+        self.title = title
         self.main_window = window
         self.schema = schema
         self.name_title = name_title
@@ -144,7 +144,11 @@ class TableViewScreen(QWidget, Ui_TableView):
         self.model.clear()
 
         for x in data:
-            name = QStandardItem(str(x["name"]))
+            if 'name' not in x and self.title=='Бронирование помещений':
+                text_name = f"Бронирование помещения с {x['date_start']} до {x['date_end']}"
+            else:
+                text_name = str(x["name"])
+            name = QStandardItem(text_name)
             name.setData(x["id"])
 
             self.model.appendRow([name])
