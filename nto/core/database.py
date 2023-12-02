@@ -60,12 +60,15 @@ def fill_initial_data() -> None:
     _initial_rooms = [
         {
             "name": "Колонный зал",
+
         },
         {
             "name": "Большой зал",
+            "events_number":1
         },
         {
             "name": "Зал-конструктор",
+            "events_number":1
         },
         {
             "name": "Малый зал",
@@ -75,6 +78,7 @@ def fill_initial_data() -> None:
         },
         {
             "name": "Библиотека",
+            "events_number":1
         },
         {
             "name": "Зимний сад",

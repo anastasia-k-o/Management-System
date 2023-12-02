@@ -1,8 +1,7 @@
-from PyQt5.QtWidgets import QLabel, QMessageBox, QWidget
+from PyQt5.QtWidgets import QLabel, QMessageBox, QWidget, QDialog, QVBoxLayout
 
 from nto.forms.compiled.designed_record_editor import Ui_RecordEditor
 from nto.forms.primitives import RecordEditorPrimitive
-
 
 class RecordEditorModal(QWidget, Ui_RecordEditor):
     def __init__(
@@ -12,23 +11,27 @@ class RecordEditorModal(QWidget, Ui_RecordEditor):
         create_update=lambda: None,
         after_hook=lambda: None,
         read_only=False,
+        booking = None
     ) -> None:
         QWidget.__init__(self)
         self.setupUi(self)
 
         self.row_id = initial_data.get("id", None)
-
         self.schema = schema
         self.create_update = create_update
         self.after_hook = after_hook
 
         self.read_only = read_only
-        if self.read_only:
-            self.SaveButton.hide()
 
         self.render(initial_data)
 
         self.SaveButton.clicked.connect(self.handle_save)
+
+        if booking is None:
+            self.bookButton.hide()
+        else:
+            self.booking_view = booking
+            self.bookButton.clicked.connect(self.handle_open_book)
 
     def render(self, initial_data={}) -> None:
         for x in self.schema:
@@ -66,3 +69,7 @@ class RecordEditorModal(QWidget, Ui_RecordEditor):
         self.after_hook()
 
         msg.exec_()
+
+    def handle_open_book(self):
+        self.booking_view.handle_add_item(data = {'room_id' : self.row_id})
+

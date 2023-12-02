@@ -83,6 +83,7 @@ class TableViewScreen(QWidget, Ui_TableView):
         post_fill_data=lambda _: None,
         tooltip=None,
         read_only=False,
+        booking = None
     ) -> None:
         QWidget.__init__(self)
         self.setupUi(self)
@@ -99,6 +100,7 @@ class TableViewScreen(QWidget, Ui_TableView):
         self.delete = delete
 
         self.read_only = read_only
+        self.booking = booking
 
         self.post_fill_data = post_fill_data
 
@@ -179,6 +181,7 @@ class TableViewScreen(QWidget, Ui_TableView):
                 initial_data=data,
                 create_update=self.create_update,
                 after_hook=self.fill_data,
+                booking = self.booking
             )
 
             diag = QDialog(self)
@@ -196,12 +199,20 @@ class TableViewScreen(QWidget, Ui_TableView):
             diag.deleteLater()
             box.deleteLater()
 
-    def handle_add_item(self) -> None:
-        editor = RecordEditorModal(
-            schema=self.schema,
-            create_update=self.create_update,
-            after_hook=self.fill_data,
-        )
+    def handle_add_item(self, data = None) -> None:
+        if isinstance(data, dict):
+            editor = RecordEditorModal(
+                schema=self.schema,
+                initial_data=data,
+                create_update=self.create_update,
+                after_hook=self.fill_data,
+            )
+        else:
+            editor = RecordEditorModal(
+                schema=self.schema,
+                create_update=self.create_update,
+                after_hook=self.fill_data,
+            )
 
         diag = QDialog(self)
         box = QVBoxLayout(diag)
@@ -229,6 +240,7 @@ class TableViewScreen(QWidget, Ui_TableView):
                 create_update=self.create_update,
                 after_hook=self.fill_data,
                 read_only=self.read_only,
+                booking = self.booking,
                 initial_data=data,
             )
 

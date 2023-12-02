@@ -23,7 +23,7 @@ class Ui_RecordEditor(object):
         self.scrollArea.setWidgetResizable(True)
         self.scrollArea.setObjectName("scrollArea")
         self.scrollAreaWidgetContents = QtWidgets.QWidget()
-        self.scrollAreaWidgetContents.setGeometry(QtCore.QRect(0, 0, 620, 419))
+        self.scrollAreaWidgetContents.setGeometry(QtCore.QRect(0, 0, 614, 413))
         self.scrollAreaWidgetContents.setObjectName("scrollAreaWidgetContents")
         self.verticalLayout_3 = QtWidgets.QVBoxLayout(self.scrollAreaWidgetContents)
         self.verticalLayout_3.setObjectName("verticalLayout_3")
@@ -35,6 +35,9 @@ class Ui_RecordEditor(object):
         self.horizontalLayout_2 = QtWidgets.QHBoxLayout()
         self.horizontalLayout_2.setSizeConstraint(QtWidgets.QLayout.SetMinimumSize)
         self.horizontalLayout_2.setObjectName("horizontalLayout_2")
+        self.bookButton = QtWidgets.QPushButton(RecordEditor)
+        self.bookButton.setObjectName("bookButton")
+        self.horizontalLayout_2.addWidget(self.bookButton)
         spacerItem = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
         self.horizontalLayout_2.addItem(spacerItem)
         self.SaveButton = QtWidgets.QPushButton(RecordEditor)
@@ -51,4 +54,5 @@ class Ui_RecordEditor(object):
     def retranslateUi(self, RecordEditor):
         _translate = QtCore.QCoreApplication.translate
         RecordEditor.setWindowTitle(_translate("RecordEditor", "Form"))
+        self.bookButton.setText(_translate("RecordEditor", "Бронирование"))
         self.SaveButton.setText(_translate("RecordEditor", "Сохранить"))
