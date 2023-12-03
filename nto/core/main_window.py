@@ -44,7 +44,10 @@ class AppWindow(QMainWindow):
         self.stack.append(instance)
 
         self.setCentralWidget(self.stack[-1])
-
+    def give_screen_instance(self, name: str, **kwargs):
+        kwargs["window"] = self
+        instance = screens[name](**kwargs)
+        return instance
     def push_screen(self, name: str, **kwargs) -> None:
         kwargs["window"] = self
 
