@@ -9,7 +9,7 @@ from nto.forms.compiled.enlightenment_dashboard import \
 from nto.forms.primitives import (RecordEditorPrimitiveDate,
                                   RecordEditorPrimitiveMultilineText,
                                   RecordEditorPrimitiveRelation,
-                                  RecordEditorPrimitiveText, RecordEditorPrimitiveDateTime)
+                                  RecordEditorPrimitiveText, RecordEditorPrimitiveDateTime, RecordEditorPrimitiveEnum)
 from nto.forms.table_view_screen import (TableViewGenericCreatorAndUpdater,
                                          TableViewGenericDeleter,
                                          TableViewGenericOneReader,
@@ -69,11 +69,70 @@ class EnlightenmentDashboard(QWidget, Ui_EnlightenmentDashboard):
                 tables.rooms_table,
             ).do,
             delete=TableViewGenericDeleter(tables.rooms_table).do,
+            booking=self.main_window.give_screen_instance(
+                "TableViewScreen",
+                title="Бронирование помещений",
+                read=TableViewGenericReader(tables.booking_table).do,
+                read_one=TableViewGenericOneReader(tables.booking_table).do,
+                create_update=TableViewGenericCreatorAndUpdater(
+                    tables.booking_table,
+                ).do,
+                delete=TableViewGenericDeleter(tables.booking_table).do,
+                schema=[
+                    {
+                        "name": "date_registration",
+                        "label": "Дата создания",
+                        "primitive": RecordEditorPrimitiveDate,
+                    },
+                    {
+                        "name": "room_id",
+                        "label": "Помещение",
+                        "primitive": RecordEditorPrimitiveRelation,
+                        "read": TableViewGenericReader(tables.rooms_table).do,
+                        "read_one": TableViewGenericOneReader(
+                            tables.rooms_table,
+                        ).do,
+                    },
+                    {
+                        "name": "event_id",
+                        "label": "Мероприятие",
+                        "primitive": RecordEditorPrimitiveRelation,
+                        "read": TableViewGenericReader(tables.events_table).do,
+                        "read_one": TableViewGenericOneReader(
+                            tables.events_table,
+                        ).do,
+                    },
+
+                    {
+                        "name": "date_start",
+                        "label": "Дата начала бронирования",
+                        "primitive": RecordEditorPrimitiveDateTime,
+                    },
+                    {
+                        "name": "date_end",
+                        "label": "Дата конца бронирования",
+                        "primitive": RecordEditorPrimitiveDateTime,
+                    },
+                    {
+                        "name": "description",
+                        "label": "Описание",
+                        "primitive": RecordEditorPrimitiveMultilineText,
+                    },
+
+
+                ],
+            ),
             schema=[
                 {
                     "name": "name",
                     "label": "Название",
                     "primitive": RecordEditorPrimitiveText,
+                },
+                {
+                    "name": "events_number",
+                    "label": "Количество мероприятий",
+                    "primitive": RecordEditorPrimitiveEnum,
+                    "variants": ["Одно мероприятие", "Два мероприятия"]
                 }
             ],
         )
@@ -86,6 +145,58 @@ class EnlightenmentDashboard(QWidget, Ui_EnlightenmentDashboard):
             read_one=TableViewGenericOneReader(tables.events_table).do,
             create_update=TableViewGenericCreatorAndUpdater(tables.events_table).do,
             delete=TableViewGenericDeleter(tables.events_table).do,
+            booking=self.main_window.give_screen_instance(
+                "TableViewScreen",
+                title="Бронирование помещений",
+                read=TableViewGenericReader(tables.booking_table).do,
+                read_one=TableViewGenericOneReader(tables.booking_table).do,
+                create_update=TableViewGenericCreatorAndUpdater(
+                    tables.booking_table,
+                ).do,
+                delete=TableViewGenericDeleter(tables.booking_table).do,
+
+                schema=[
+                    {
+                        "name": "date_registration",
+                        "label": "Дата создания",
+                        "primitive": RecordEditorPrimitiveDate,
+                    },
+                    {
+                        "name": "room_id",
+                        "label": "Помещение",
+                        "primitive": RecordEditorPrimitiveRelation,
+                        "read": TableViewGenericReader(tables.rooms_table).do,
+                        "read_one": TableViewGenericOneReader(
+                            tables.rooms_table,
+                        ).do,
+                    },
+                    {
+                        "name": "event_id",
+                        "label": "Мероприятие",
+                        "primitive": RecordEditorPrimitiveRelation,
+                        "read": TableViewGenericReader(tables.events_table).do,
+                        "read_one": TableViewGenericOneReader(
+                            tables.events_table,
+                        ).do,
+                    },
+
+                    {
+                        "name": "date_start",
+                        "label": "Дата начала бронирования",
+                        "primitive": RecordEditorPrimitiveDateTime,
+                    },
+                    {
+                        "name": "date_end",
+                        "label": "Дата конца бронирования",
+                        "primitive": RecordEditorPrimitiveDateTime,
+                    },
+                    {
+                        "name": "description",
+                        "label": "Описание",
+                        "primitive": RecordEditorPrimitiveMultilineText,
+                    },
+                ],
+            ),
             schema=[
                 {
                     "name": "name",

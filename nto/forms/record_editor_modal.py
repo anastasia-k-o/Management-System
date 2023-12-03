@@ -71,5 +71,5 @@ class RecordEditorModal(QWidget, Ui_RecordEditor):
         msg.exec_()
 
     def handle_open_book(self):
-        self.booking_view.handle_add_item(data = {'room_id' : self.row_id})
+        self.booking_view.handle_add_item(data = {'event_id' : self.row_id})
 
