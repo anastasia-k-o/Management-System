@@ -181,7 +181,9 @@ class TableViewScreen(QWidget, Ui_TableView):
                 initial_data=data,
                 create_update=self.create_update,
                 after_hook=self.fill_data,
-                booking = self.booking
+                booking = self.booking,
+                read = self.read,
+                title = self.title
             )
 
             diag = QDialog(self)
@@ -206,12 +208,16 @@ class TableViewScreen(QWidget, Ui_TableView):
                 initial_data=data,
                 create_update=self.create_update,
                 after_hook=self.fill_data,
+                read = self.read,
+                title = self.title
             )
         else:
             editor = RecordEditorModal(
                 schema=self.schema,
                 create_update=self.create_update,
                 after_hook=self.fill_data,
+                read = self.read,
+                title = self.title
             )
 
         diag = QDialog(self)
@@ -242,6 +248,8 @@ class TableViewScreen(QWidget, Ui_TableView):
                 read_only=self.read_only,
                 booking = self.booking,
                 initial_data=data,
+                read = self.read,
+                title = self.title
             )
 
             diag = QDialog(self)

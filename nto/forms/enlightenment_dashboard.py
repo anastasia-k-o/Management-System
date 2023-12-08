@@ -69,59 +69,7 @@ class EnlightenmentDashboard(QWidget, Ui_EnlightenmentDashboard):
                 tables.rooms_table,
             ).do,
             delete=TableViewGenericDeleter(tables.rooms_table).do,
-            booking=self.main_window.give_screen_instance(
-                "TableViewScreen",
-                title="Бронирование помещений",
-                read=TableViewGenericReader(tables.booking_table).do,
-                read_one=TableViewGenericOneReader(tables.booking_table).do,
-                create_update=TableViewGenericCreatorAndUpdater(
-                    tables.booking_table,
-                ).do,
-                delete=TableViewGenericDeleter(tables.booking_table).do,
-                schema=[
-                    {
-                        "name": "date_registration",
-                        "label": "Дата создания",
-                        "primitive": RecordEditorPrimitiveDate,
-                    },
-                    {
-                        "name": "room_id",
-                        "label": "Помещение",
-                        "primitive": RecordEditorPrimitiveRelation,
-                        "read": TableViewGenericReader(tables.rooms_table).do,
-                        "read_one": TableViewGenericOneReader(
-                            tables.rooms_table,
-                        ).do,
-                    },
-                    {
-                        "name": "event_id",
-                        "label": "Мероприятие",
-                        "primitive": RecordEditorPrimitiveRelation,
-                        "read": TableViewGenericReader(tables.events_table).do,
-                        "read_one": TableViewGenericOneReader(
-                            tables.events_table,
-                        ).do,
-                    },
 
-                    {
-                        "name": "date_start",
-                        "label": "Дата начала бронирования",
-                        "primitive": RecordEditorPrimitiveDateTime,
-                    },
-                    {
-                        "name": "date_end",
-                        "label": "Дата конца бронирования",
-                        "primitive": RecordEditorPrimitiveDateTime,
-                    },
-                    {
-                        "name": "description",
-                        "label": "Описание",
-                        "primitive": RecordEditorPrimitiveMultilineText,
-                    },
-
-
-                ],
-            ),
             schema=[
                 {
                     "name": "name",
@@ -178,6 +126,12 @@ class EnlightenmentDashboard(QWidget, Ui_EnlightenmentDashboard):
                         "read_one": TableViewGenericOneReader(
                             tables.events_table,
                         ).do,
+                    },
+                    {
+                        "name": "booking_part",
+                        "label": "Мероприятие займет",
+                        "primitive": RecordEditorPrimitiveEnum,
+                        "variants": ["Часть помещения", "Всё помещение"]
                     },
 
                     {

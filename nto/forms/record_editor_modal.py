@@ -11,7 +11,9 @@ class RecordEditorModal(QWidget, Ui_RecordEditor):
         create_update=lambda: None,
         after_hook=lambda: None,
         read_only=False,
-        booking = None
+        booking = None,
+        read = lambda: None,
+        title = None
     ) -> None:
         QWidget.__init__(self)
         self.setupUi(self)
@@ -20,10 +22,13 @@ class RecordEditorModal(QWidget, Ui_RecordEditor):
         self.schema = schema
         self.create_update = create_update
         self.after_hook = after_hook
+        self.read = read
+        self.title = title
 
         self.read_only = read_only
 
         self.render(initial_data)
+        self.booking = booking
 
         self.SaveButton.clicked.connect(self.handle_save)
 
@@ -60,11 +65,31 @@ class RecordEditorModal(QWidget, Ui_RecordEditor):
                 return
 
             newdata[w.name] = w.get_value()
+        if self.title == 'Бронирование помещений':
+            self.row_id = None
+            all_bookings = self.read()
+            possible_place = self.schema[1]['read_one'](newdata['room_id'])['events_number'] + 1
+            available_place =possible_place
+            for booking in all_bookings:
+                if booking['room_id'] == newdata['room_id'] and booking['date_start'] <= newdata['date_end'] and newdata['date_start'] <= booking['date_end'] :
+                    available_place -= booking['booking_part'] + 1
+            if available_place <= 0:
+                msg = QMessageBox()
+                msg.setText("Бронирование недоступно, помещение занято")
 
-        msg = QMessageBox()
-        msg.setText("Запись успешно " + ("изменена" if self.row_id else "создана"))
+            elif available_place == 1 and newdata['booking_part'] == 1 and possible_place != 1:
+                msg = QMessageBox()
+                msg.setText("Невозможно заброинровать помещение полностью, доступна только часть")
+            else:
+                msg = QMessageBox()
+                msg.setText("Запись успешно " + ("изменена" if self.row_id else "создана"))
 
-        self.row_id = self.create_update(self.row_id, newdata)
+                self.row_id = self.create_update(self.row_id, newdata)
+        else:
+            msg = QMessageBox()
+            msg.setText("Запись успешно " + ("изменена" if self.row_id else "создана"))
+
+            self.row_id = self.create_update(self.row_id, newdata)
 
         self.after_hook()
 

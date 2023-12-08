@@ -170,7 +170,7 @@ def fill_initial_data() -> None:
             "event_id": 1,
             "date_start": datetime(2023, 11, 20,14,00,00),
             "date_end": datetime(2023, 11, 23,18,00,00),
-
+            "booking_part":1,
             "description": "Установить декорации в сказочном стиле",
         },
 
