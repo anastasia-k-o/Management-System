@@ -9,7 +9,7 @@ from nto.models.tables import (
     events_table,
     labor_requests_table,
     labor_types_table,
-    rooms_table, booking_table,
+    rooms_table, booking_table, classes_type_table, week_days_table, teachers_table,
 )
 from nto.utils.get_path import get_appdata
 
@@ -176,6 +176,27 @@ def fill_initial_data() -> None:
 
     ]
 
+    _initial_week_days = [
+        {"name" : "Понедельник"},
+        {"name": "Вторник"},
+        {"name": "Среда"},
+        {"name": "Четверг"},
+        {"name": "Пятница"},
+        {"name": "Суббота"},
+        {"name": "Воскресение"},
+
+    ]
+
+    _initial_classes_type = [
+        {"name": "Рисование"},
+        {"name": "Акробатика"},
+        {"name": "Танцы"}
+    ]
+
+    _initial_teachers = [
+        {"name": "Ивано Иван Иванович"}
+    ]
+
 
     dataver_path = get_appdata("data_version")
     if not os.path.exists(dataver_path):
@@ -203,10 +224,17 @@ def fill_initial_data() -> None:
     if dataver<3:
         for x in _initial_booking:
             conn.execute(insert(booking_table).values(x))
+    if dataver < 4:
+        for x in _initial_week_days:
+            conn.execute(insert(week_days_table).values(x))
+        for x in _initial_classes_type:
+            conn.execute(insert(classes_type_table).values(x))
+        for x in _initial_teachers:
+            conn.execute(insert(teachers_table).values(x))
 
 
     f = open(dataver_path, "w")
-    f.write("3")  # максимальная версия, менять с каждым дефолтным заполнением
+    f.write("4")  # максимальная версия, менять с каждым дефолтным заполнением
     f.close()
 
     conn.commit()

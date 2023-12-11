@@ -14,7 +14,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_EducationDashboard(object):
     def setupUi(self, EducationDashboard):
         EducationDashboard.setObjectName("EducationDashboard")
-        EducationDashboard.resize(470, 484)
+        EducationDashboard.resize(614, 417)
         self.verticalLayout_2 = QtWidgets.QVBoxLayout(EducationDashboard)
         self.verticalLayout_2.setObjectName("verticalLayout_2")
         self.verticalLayout = QtWidgets.QVBoxLayout()

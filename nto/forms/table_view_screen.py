@@ -12,6 +12,7 @@ from sqlalchemy.inspection import exc
 
 from nto.core.database import conn
 from nto.forms.compiled.designed_table_view import Ui_TableView
+from nto.forms.primitives import RecordEditorPrimitiveEnum
 from nto.forms.record_editor_modal import RecordEditorModal
 
 if TYPE_CHECKING:
@@ -173,6 +174,7 @@ class TableViewScreen(QWidget, Ui_TableView):
     def handle_edit_item(self) -> None:
         ids = self.get_selected_indexes()
 
+
         for x in ids:
             data = self.read_one(x)
 
@@ -184,7 +186,9 @@ class TableViewScreen(QWidget, Ui_TableView):
                 booking = self.booking,
                 read = self.read,
                 title = self.title
+
             )
+
 
             diag = QDialog(self)
             box = QVBoxLayout(diag)
@@ -219,6 +223,7 @@ class TableViewScreen(QWidget, Ui_TableView):
                 read = self.read,
                 title = self.title
             )
+
 
         diag = QDialog(self)
         box = QVBoxLayout(diag)

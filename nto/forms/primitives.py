@@ -1,11 +1,11 @@
-from datetime import date, datetime
+from datetime import date, datetime, time
 from typing import Any, Dict
 
-from PyQt5.QtCore import QDate
+from PyQt5.QtCore import QDate, QTime
 from PyQt5.QtGui import QStandardItem, QStandardItemModel
 from PyQt5.QtWidgets import (QComboBox, QDateEdit, QDialog, QHBoxLayout,
                              QLineEdit, QMessageBox, QPushButton, QSizePolicy,
-                             QTextEdit, QVBoxLayout, QWidget, QDateTimeEdit)
+                             QTextEdit, QVBoxLayout, QWidget, QDateTimeEdit, QTimeEdit)
 
 from nto.forms.compiled.relation_table_chooser import Ui_RelationTableView
 
@@ -48,8 +48,10 @@ class RecordEditorPrimitiveEnum(RecordEditorPrimitive):
 
         self.combo = QComboBox()
         self.initial_data = 0 if not initial_data else initial_data
-
+        self.combo.currentIndexChanged.connect(self.check)
+        self.days = []
         layout.addWidget(self.combo)
+        self.first_time = True
 
         layout.setContentsMargins(0, 0, 0, 0)
 
@@ -72,6 +74,41 @@ class RecordEditorPrimitiveEnum(RecordEditorPrimitive):
     def get_value(self) -> Any:
         return self.combo.currentIndex()
 
+    def check(self):
+        try:
+            if self.name=='class_time':
+                if self.combo.currentIndex()==2:
+                    self.form.itemAt(10).widget().show()
+                    self.form.itemAt(11).widget().show()
+                    self.form.itemAt(12).widget().hide()
+                    self.form.itemAt(13).widget().hide()
+                    self.form.itemAt(14).widget().hide()
+                    self.form.itemAt(15).widget().hide()
+                    self.days[1].line.setText("")
+                    self.days[1].data = None
+                    self.days[2].line.setText("")
+                    self.days[2].data = None
+                if self.combo.currentIndex()==1:
+                    self.form.itemAt(10).widget().show()
+                    self.form.itemAt(11).widget().show()
+                    self.form.itemAt(12).widget().show()
+                    self.form.itemAt(13).widget().show()
+                    self.form.itemAt(14).widget().hide()
+                    self.form.itemAt(15).widget().hide()
+                    self.days[2].line.setText("")
+                    self.days[2].data = None
+                if self.combo.currentIndex()==0:
+                    self.form.itemAt(10).widget().show()
+                    self.form.itemAt(11).widget().show()
+                    self.form.itemAt(12).widget().show()
+                    self.form.itemAt(13).widget().show()
+                    self.form.itemAt(14).widget().show()
+                    self.form.itemAt(15).widget().show()
+        except AttributeError:
+            pass
+
+
+
 
 class RecordEditorPrimitiveText(RecordEditorPrimitive):
     def __init__(self, name="", initial_data="") -> None:
@@ -83,6 +120,7 @@ class RecordEditorPrimitiveText(RecordEditorPrimitive):
 
         self.line = QLineEdit()
         self.line.setText(initial_data)
+
 
         layout.addWidget(self.line)
 
@@ -101,6 +139,8 @@ class RecordEditorPrimitiveText(RecordEditorPrimitive):
 
     def get_value(self) -> str:
         return self.line.text().strip()
+
+
 
 
 class RecordEditorPrimitiveMultilineText(RecordEditorPrimitive):
@@ -300,6 +340,7 @@ class RecordEditorPrimitiveRelation(RecordEditorPrimitive):
 
 
 
+
 class RecordEditorPrimitiveDateTime(RecordEditorPrimitive):
     def __init__(self, name="", initial_data=datetime) -> None:
         super().__init__()
@@ -330,4 +371,38 @@ class RecordEditorPrimitiveDateTime(RecordEditorPrimitive):
         t = self.date.time()
 
         return datetime(d.year(), d.month(), d.day(), t.hour(), t.minute(), t.second())
+
+class RecordEditorPrimitiveTime(RecordEditorPrimitive):
+    def __init__(self, name="", initial_data=time) -> None:
+        super().__init__()
+
+        layout = QVBoxLayout(self)
+
+        self.name = name
+        self.date = QTimeEdit()
+        if not initial_data:
+            initial_data = datetime.today().time()
+
+        self.date.setTime(
+            QTime(
+                initial_data.hour,  # type: ignore
+                initial_data.minute,  # type: ignore
+                initial_data.second,  # type: ignore
+            )
+        )
+
+        layout.addWidget(self.date)
+
+        layout.setContentsMargins(0, 0, 0, 0)
+
+    def set_schema(self, schema={}) -> None:
+        super().set_schema(schema)
+
+        self.date.setReadOnly(self.schema.get("read_only", False))
+
+    def get_value(self) -> date:
+        d = self.date.time()
+
+        return time(d.hour(), d.minute(), d.second())
+
 

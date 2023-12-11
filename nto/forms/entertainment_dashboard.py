@@ -9,7 +9,8 @@ from nto.forms.compiled.entertainment_dashboard import \
 from nto.forms.primitives import (RecordEditorPrimitiveDate,
                                   RecordEditorPrimitiveMultilineText,
                                   RecordEditorPrimitiveRelation,
-                                  RecordEditorPrimitiveText, RecordEditorPrimitiveDateTime, RecordEditorPrimitiveEnum)
+                                  RecordEditorPrimitiveText, RecordEditorPrimitiveDateTime, RecordEditorPrimitiveEnum,
+                                  RecordEditorPrimitiveTime)
 from nto.forms.record_editor_modal import RecordEditorModal
 from nto.forms.table_view_screen import (TableViewGenericCreatorAndUpdater,
                                          TableViewGenericDeleter,
@@ -37,6 +38,7 @@ class EntertainmentDashboard(QWidget, Ui_EntertainmentDashboard):
         self.OpenLaborTypes.clicked.connect(self.handle_open_labor_types)
         self.OpenLaborRequests.clicked.connect(self.handle_open_labor_requests)
         self.bookingRooms.clicked.connect(self.handle_open_booking)
+
 
     def handle_open_labor_requests(self) -> None:
         self.main_window.push_screen("LaborTableViewScreen")
