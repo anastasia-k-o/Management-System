@@ -64,6 +64,17 @@ booking_table = Table(
 
 )
 
+history_table = Table(
+    "history",
+    meta,
+    Column("date_registration", Date),
+    Column("id", Integer, primary_key=True),
+    Column("room_id", ForeignKey("rooms.id", ondelete="RESTRICT")),
+    Column("event_id", ForeignKey("events.id", ondelete="RESTRICT")),
+    Column("date_start", DateTime),
+    Column("date_end", DateTime),
+    Column("description", String),
+
 classes_type_table = Table(
     "classes_type",
     meta,
