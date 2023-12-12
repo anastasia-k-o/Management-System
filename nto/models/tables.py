@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Date, DateTime, ForeignKey, Integer, String, Table
+from sqlalchemy import Column, Date, Time, DateTime, ForeignKey, Integer, String, Table
 
 from nto.models.meta import meta
 
@@ -60,6 +60,7 @@ booking_table = Table(
     Column("date_start", DateTime),
     Column("date_end", DateTime),
     Column("description", String),
+    Column("booking_part", Integer)
 
 )
 
@@ -73,4 +74,40 @@ history_table = Table(
     Column("date_start", DateTime),
     Column("date_end", DateTime),
     Column("description", String),
+
+classes_type_table = Table(
+    "classes_type",
+    meta,
+    Column("id", Integer, primary_key=True),
+    Column("name", String, unique=True),
+)
+
+teachers_table = Table(
+    "teachers",
+    meta,
+    Column("id", Integer, primary_key=True),
+    Column("name", String, unique=True),
+)
+week_days_table = Table(
+    "week_days",
+    meta,
+    Column("id", Integer, primary_key=True),
+    Column("name", String, unique=True),
+)
+
+classes_table = Table(
+    "classes",
+    meta,
+    Column("id", Integer, primary_key=True),
+    Column("name", String, unique=True),
+    Column("date_start", Date),
+    Column("class_id", ForeignKey("classes_type.id", ondelete="RESTRICT")),
+    Column("teacher_id", ForeignKey("teachers.id", ondelete="RESTRICT")),
+    Column("room_id", ForeignKey("rooms.id", ondelete="RESTRICT")),
+    Column("class_time", Integer),
+    Column("class_day1", ForeignKey("week_days.id", ondelete="RESTRICT"), nullable=True),
+    Column("class_day2", ForeignKey("week_days.id", ondelete="RESTRICT"), nullable=True),
+    Column("class_day3", ForeignKey("week_days.id", ondelete="RESTRICT"), nullable=True),
+    Column("class_start", Time),
+    Column("class_end", Time)
 )

@@ -9,7 +9,8 @@ from nto.forms.compiled.entertainment_dashboard import \
 from nto.forms.primitives import (RecordEditorPrimitiveDate,
                                   RecordEditorPrimitiveMultilineText,
                                   RecordEditorPrimitiveRelation,
-                                  RecordEditorPrimitiveText, RecordEditorPrimitiveDateTime, RecordEditorPrimitiveEnum)
+                                  RecordEditorPrimitiveText, RecordEditorPrimitiveDateTime, RecordEditorPrimitiveEnum,
+                                  RecordEditorPrimitiveTime)
 from nto.forms.record_editor_modal import RecordEditorModal
 from nto.forms.table_view_screen import (TableViewGenericCreatorAndUpdater,
                                          TableViewGenericDeleter,
@@ -37,8 +38,8 @@ class EntertainmentDashboard(QWidget, Ui_EntertainmentDashboard):
         self.OpenLaborTypes.clicked.connect(self.handle_open_labor_types)
         self.OpenLaborRequests.clicked.connect(self.handle_open_labor_requests)
         self.bookingRooms.clicked.connect(self.handle_open_booking)
-
         self.bookingHistory.clicked.connect(self.handle_open_history)
+
 
     def handle_open_labor_requests(self) -> None:
         self.main_window.push_screen("LaborTableViewScreen")
@@ -72,58 +73,6 @@ class EntertainmentDashboard(QWidget, Ui_EntertainmentDashboard):
                 tables.rooms_table,
             ).do,
             delete=TableViewGenericDeleter(tables.rooms_table).do,
-            booking=self.main_window.give_screen_instance(
-                "TableViewScreen",
-                title="Бронирование помещений",
-                read=TableViewGenericReader(tables.booking_table).do,
-                read_one=TableViewGenericOneReader(tables.booking_table).do,
-                create_update=TableViewGenericCreatorAndUpdater(
-                    tables.booking_table,
-                ).do,
-                delete=TableViewGenericDeleter(tables.booking_table).do,
-                schema=[
-                    {
-                        "name": "date_registration",
-                        "label": "Дата создания",
-                        "primitive": RecordEditorPrimitiveDate,
-                    },
-                    {
-                        "name": "room_id",
-                        "label": "Помещение",
-                        "primitive": RecordEditorPrimitiveRelation,
-                        "read": TableViewGenericReader(tables.rooms_table).do,
-                        "read_one": TableViewGenericOneReader(
-                            tables.rooms_table,
-                        ).do,
-                    },
-
-                    {
-                        "name": "event_id",
-                        "label": "Мероприятие",
-                        "primitive": RecordEditorPrimitiveRelation,
-                        "read": TableViewGenericReader(tables.events_table).do,
-                        "read_one": TableViewGenericOneReader(
-                            tables.events_table,
-                        ).do,
-                    },
-
-                    {
-                        "name": "date_start",
-                        "label": "Дата начала бронирования",
-                        "primitive": RecordEditorPrimitiveDateTime,
-                    },
-                    {
-                        "name": "date_end",
-                        "label": "Дата конца бронирования",
-                        "primitive": RecordEditorPrimitiveDateTime,
-                    },
-                    {
-                        "name": "description",
-                        "label": "Описание",
-                        "primitive": RecordEditorPrimitiveMultilineText,
-                    },
-                ],
-            ),
             schema=[
                 {
                     "name": "name",
@@ -181,6 +130,15 @@ class EntertainmentDashboard(QWidget, Ui_EntertainmentDashboard):
                             tables.events_table,
                         ).do,
                     },
+
+                    {
+                        "name": "booking_part",
+                        "label": "Мероприятие займет",
+                        "primitive": RecordEditorPrimitiveEnum,
+                        "variants": ["Часть помещения", "Всё помещение"]
+                    },
+
+
 
                     {
                         "name": "date_start",
@@ -280,7 +238,12 @@ class EntertainmentDashboard(QWidget, Ui_EntertainmentDashboard):
                         tables.events_table,
                     ).do,
                 },
-
+                {
+                    "name": "booking_part",
+                    "label": "Мероприятие займет",
+                    "primitive": RecordEditorPrimitiveEnum,
+                    "variants": ["Часть помещения", "Всё помещение"]
+                },
                 {
                     "name": "date_start",
                     "label": "Дата начала бронирования",
