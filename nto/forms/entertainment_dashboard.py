@@ -263,4 +263,14 @@ class EntertainmentDashboard(QWidget, Ui_EntertainmentDashboard):
         )
 
     def handle_open_history(self) -> None:
-        self.main_window.push_screen("CalendarApp")
+        self.main_window.push_screen(
+            "CalendarViewScreen",
+            title="История бронирования",
+            read=TableViewGenericReader(tables.classes_table).do,
+            read_one=TableViewGenericOneReader(tables.classes_table).do,
+            create_update=TableViewGenericCreatorAndUpdater(
+                tables.classes_table,
+            ).do,
+            delete=TableViewGenericDeleter(tables.classes_table).do,
+
+        )

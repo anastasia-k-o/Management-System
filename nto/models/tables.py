@@ -73,7 +73,7 @@ history_table = Table(
     Column("event_id", ForeignKey("events.id", ondelete="RESTRICT")),
     Column("date_start", DateTime),
     Column("date_end", DateTime),
-    Column("description", String),
+    Column("description", String),)
 
 classes_type_table = Table(
     "classes_type",
