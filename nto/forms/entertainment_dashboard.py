@@ -38,6 +38,8 @@ class EntertainmentDashboard(QWidget, Ui_EntertainmentDashboard):
         self.OpenLaborRequests.clicked.connect(self.handle_open_labor_requests)
         self.bookingRooms.clicked.connect(self.handle_open_booking)
 
+        self.bookingHistory.clicked.connect(self.handle_open_history)
+
     def handle_open_labor_requests(self) -> None:
         self.main_window.push_screen("LaborTableViewScreen")
 
@@ -296,3 +298,6 @@ class EntertainmentDashboard(QWidget, Ui_EntertainmentDashboard):
                 },
             ],
         )
+
+    def handle_open_history(self) -> None:
+        self.main_window.push_screen("CalendarApp")

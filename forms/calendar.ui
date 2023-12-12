@@ -1,0 +1,44 @@
+<ui version="4.0">
+ <class>CalendarApp</class>
+ <widget class="QWidget" name="CalendarWindow">
+  <layout class="QVBoxLayout" name="verticalLayout">
+   <item>
+    <widget class="QLabel" name="labelDateRange">
+     <property name="text">
+      <string>Дата</string>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <layout class="QHBoxLayout">
+     <item>
+      <widget class="QPushButton" name="buttonPreviousWeek">
+       <property name="text">
+        <string>&lt;</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="buttonNextWeek">
+       <property name="text">
+        <string>&gt;</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <widget class="QTableWidget" name="tableWidget">
+     <property name="rowCount">
+      <number>24</number>
+     </property>
+     <property name="columnCount">
+      <number>7</number>
+     </property>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
