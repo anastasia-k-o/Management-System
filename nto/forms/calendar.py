@@ -1,12 +1,15 @@
 from __future__ import annotations
 
 from datetime import datetime, timedelta
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, List
 
 from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import QTableWidget, QTableWidgetItem, QVBoxLayout, \
-    QHBoxLayout, QPushButton, QLabel
+    QHBoxLayout, QPushButton, QLabel, QDialog
 from PyQt5.QtWidgets import QWidget
+from PyQt5.uic.properties import QtWidgets
+
+from nto.forms.record_editor_modal import RecordEditorModal
 
 if TYPE_CHECKING:
     from nto.core.main_window import AppWindow
@@ -47,11 +50,12 @@ class CalendarViewScreen(QWidget, Ui_CalendarWindow):
         self.read = read
         self.read_one = read_one
         self.delete = delete
-
+        self.read_only = read_only
         self.booking = booking
 
         self.post_fill_data = post_fill_data
-
+        self.tableTime.setEditTriggers(QTableWidget.NoEditTriggers)
+        self.tableTime.doubleClicked.connect(self.double_click)
 
         self.BackButton.clicked.connect(self.main_window.pop_screen)
         self.buttonPreviousWeek.clicked.connect(self.prevWeek)
@@ -80,17 +84,19 @@ class CalendarViewScreen(QWidget, Ui_CalendarWindow):
         calendar_events = []
         for event in events:
             event_day = event.date_start
-            if start_date <= event_day < end_date:
+            if start_date <= event_day < end_date or event_day<=start_date:
                 days = {event.class_day1}
                 if event.class_day2 is not None:
                     days.add(event.class_day2)
-                if event.class_day2 is not None:
+                if event.class_day3 is not None:
                     days.add(event.class_day3)
-                start_datetime = datetime.combine(datetime.today(), event.class_start),
-                end_datetime = datetime.combine(datetime.today(), event.class_end),
-                duration_timedelta = end_datetime - start_datetime,
+                start_datetime = datetime.combine(datetime.today(), event.class_start)
+                end_datetime = datetime.combine(datetime.today(), event.class_end)
+                duration_timedelta = end_datetime - start_datetime
                 duration_hours = duration_timedelta.seconds // 3600
                 for day in days:
+                    if  start_date + timedelta(days=day) < event_day:
+                        continue
                     calendar_events.append({
                         "name": event.name,
                         "day": day,  # 0 - начало недели, 6 - конец недели
@@ -108,8 +114,8 @@ class CalendarViewScreen(QWidget, Ui_CalendarWindow):
             for hour in range(event["start_hour"], event["start_hour"] + event["duration"]):
                 eventItem = QTableWidgetItem(event["name"])
                 # Настройка внешнего вида ячейки в зависимости от типа мероприятия
-                eventItem.setBackground(Qt.yellow if event["room_id"] != 0 else Qt.green)
-                self.tableTime.setItem(hour, event["day"], eventItem)
+                eventItem.setBackground(Qt.yellow)
+                self.tableTime.setItem(hour, event["day"]-1, eventItem)
     #
     def clearEvents(self):
         for row in range(self.tableTime.rowCount()):
@@ -139,3 +145,47 @@ class CalendarViewScreen(QWidget, Ui_CalendarWindow):
         self.updateDateLabel()
         self.updateTableHeaders()
         self.setupEvents()
+
+    def double_click(self):
+
+        ids = list(set(self.get_selected_classes()))
+
+        for data in ids:
+
+            editor = RecordEditorModal(
+                schema=self.schema,
+                create_update=self.create_update,
+                after_hook=self.fill_data,
+                read_only=self.read_only,
+                booking=self.booking,
+                initial_data=data,
+                read=self.read,
+                title=self.title
+            )
+
+            diag = QDialog(self)
+            box = QVBoxLayout(diag)
+            box.addWidget(editor)
+            diag.setLayout(box)
+            diag.setWindowTitle("Редактор записи")
+            diag.resize(500, 400)
+
+            diag.exec_()
+            self.fill_data()
+
+            editor.deleteLater()
+            diag.deleteLater()
+            box.deleteLater()
+
+    def get_selected_classes(self) -> List[int]:
+        selected_indexes = self.tableTime.selectionModel().selectedIndexes()
+        selected_classes = []
+        all_classes = self.read()
+        for x in selected_indexes:
+            for class_ in all_classes:
+                if class_['name'] == self.tableTime.item(x.row(), x.column()).text():
+                    selected_classes.append(
+                       class_
+                    )
+
+        return selected_classes

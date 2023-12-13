@@ -33,6 +33,9 @@ class RecordEditorModal(QWidget, Ui_RecordEditor):
 
         self.SaveButton.clicked.connect(self.handle_save)
 
+        if self.read_only:
+            self.SaveButton.hide()
+
         if booking is None:
             self.bookButton.hide()
         else:
@@ -113,7 +116,7 @@ class RecordEditorModal(QWidget, Ui_RecordEditor):
                     circle_days.add(circle['class_day2'])
                 if circle['class_day3'] is not None:
                     circle_days.add(circle['class_day3'])
-                if (circle['room_id'] == newdata['room_id'] or circle['teacher_id'] == newdata['teacher_id']) and \
+                if (circle['auditorium_id'] == newdata['auditorium_id'] or circle['teacher_id'] == newdata['teacher_id']) and \
                         circle['class_start'] <= newdata['class_end'] and \
                         circle_days.intersection(newdata_days) and self.row_id != circle['id']:
                     flag += 1

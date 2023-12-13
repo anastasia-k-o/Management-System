@@ -95,6 +95,15 @@ week_days_table = Table(
     Column("name", String, unique=True),
 )
 
+auditorium_table = Table(
+    "auditorium",
+    meta,
+    Column("id", Integer, primary_key=True),
+    Column("name", String, unique=True)
+
+)
+
+
 classes_table = Table(
     "classes",
     meta,
@@ -103,7 +112,7 @@ classes_table = Table(
     Column("date_start", Date),
     Column("class_id", ForeignKey("classes_type.id", ondelete="RESTRICT")),
     Column("teacher_id", ForeignKey("teachers.id", ondelete="RESTRICT")),
-    Column("room_id", ForeignKey("rooms.id", ondelete="RESTRICT")),
+    Column("auditorium_id", ForeignKey("auditorium.id", ondelete="RESTRICT")),
     Column("class_time", Integer),
     Column("class_day1", ForeignKey("week_days.id", ondelete="RESTRICT"), nullable=True),
     Column("class_day2", ForeignKey("week_days.id", ondelete="RESTRICT"), nullable=True),

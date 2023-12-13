@@ -1,5 +1,6 @@
+0
 import os
-from datetime import date, datetime
+from datetime import date, datetime, time
 
 from sqlalchemy import create_engine, insert, text
 
@@ -9,7 +10,7 @@ from nto.models.tables import (
     events_table,
     labor_requests_table,
     labor_types_table,
-    rooms_table, booking_table, classes_type_table, week_days_table, teachers_table,
+    rooms_table, booking_table, classes_type_table, week_days_table, teachers_table, classes_table, auditorium_table,
 )
 from nto.utils.get_path import get_appdata
 
@@ -186,17 +187,51 @@ def fill_initial_data() -> None:
         {"name": "Воскресение"},
 
     ]
-
     _initial_classes_type = [
-        {"name": "Рисование"},
-        {"name": "Акробатика"},
-        {"name": "Танцы"}
+        {"name": "Театральный"},
+        {"name": "Художественный"},
+        {"name": "Музыкальный"},
+        {"name": "Спортивный"}
     ]
 
     _initial_teachers = [
-        {"name": "Ивано Иван Иванович"}
+        {"name": "Наталья Анатольевна Корельская"},
+        {"name": "Попков Игорь Валерьевич"},
+        {"name": "Барто Екатерина Андреевна"},
+        {"name": "Демченко Наталья Сергеевна"}
     ]
 
+    _initial_classes = [
+        {
+            'name': "Карате",
+            "date_start": date(2023, 12, 13),
+            'class_id': 4,
+            'teacher_id': 4,
+            'auditorium_id': 2,
+            'class_time': 1,
+            'class_day1': 3,
+            'class_day2': 6,
+            'class_start': time(19, 10, 00),
+            'class_end': time(20, 10, 00)
+        }
+    ]
+
+
+    _initial_auditorium = [
+        {
+            "name": "Аудитория 324",
+
+        },
+        {
+            "name": "Аудитория 345",
+        },
+        {
+            "name": "Аудитория 328",
+        },
+        {
+            "name": "Аудитория 289",
+        },
+    ]
 
     dataver_path = get_appdata("data_version")
     if not os.path.exists(dataver_path):
@@ -231,6 +266,14 @@ def fill_initial_data() -> None:
             conn.execute(insert(classes_type_table).values(x))
         for x in _initial_teachers:
             conn.execute(insert(teachers_table).values(x))
+        for x in _initial_auditorium:
+            conn.execute(insert(auditorium_table).values(x))
+        for x in _initial_classes:
+            conn.execute(insert(classes_table).values(x))
+
+
+
+
 
 
     f = open(dataver_path, "w")

@@ -38,7 +38,7 @@ class EntertainmentDashboard(QWidget, Ui_EntertainmentDashboard):
         self.OpenLaborTypes.clicked.connect(self.handle_open_labor_types)
         self.OpenLaborRequests.clicked.connect(self.handle_open_labor_requests)
         self.bookingRooms.clicked.connect(self.handle_open_booking)
-        self.bookingHistory.clicked.connect(self.handle_open_history)
+
 
 
     def handle_open_labor_requests(self) -> None:
@@ -262,15 +262,3 @@ class EntertainmentDashboard(QWidget, Ui_EntertainmentDashboard):
             ],
         )
 
-    def handle_open_history(self) -> None:
-        self.main_window.push_screen(
-            "CalendarViewScreen",
-            title="История бронирования",
-            read=TableViewGenericReader(tables.classes_table).do,
-            read_one=TableViewGenericOneReader(tables.classes_table).do,
-            create_update=TableViewGenericCreatorAndUpdater(
-                tables.classes_table,
-            ).do,
-            delete=TableViewGenericDeleter(tables.classes_table).do,
-
-        )

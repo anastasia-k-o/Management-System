@@ -41,6 +41,9 @@ class EnlightenmentDashboard(QWidget, Ui_EnlightenmentDashboard):
         self.teachers.clicked.connect(self.handle_open_teachers)
         self.weekDays.clicked.connect(self.handle_open_week_days)
         self.workOfClass.clicked.connect(self.handle_open_classes)
+        self.auditoriumButt.clicked.connect(self.handle_open_auditoriums)
+        self.bookingHistory.clicked.connect(self.handle_open_history)
+
 
     def handle_open_labor_requests(self) -> None:
         self.main_window.push_screen("LaborTableViewScreen")
@@ -88,8 +91,8 @@ class EnlightenmentDashboard(QWidget, Ui_EnlightenmentDashboard):
                     "variants": ["Одно мероприятие", "Два мероприятия"]
                 }
             ],
-        )
 
+        )
     def handle_open_events(self) -> None:
         self.main_window.push_screen(
             "TableViewScreen",
@@ -346,12 +349,12 @@ class EnlightenmentDashboard(QWidget, Ui_EnlightenmentDashboard):
                     ).do,
                 },
                 {
-                    "name": "room_id",
-                    "label": "Помещение",
+                    "name": "auditorium_id",
+                    "label": "Место проведения",
                     "primitive": RecordEditorPrimitiveRelation,
-                    "read": TableViewGenericReader(tables.rooms_table).do,
+                    "read": TableViewGenericReader(tables.auditorium_table).do,
                     "read_one": TableViewGenericOneReader(
-                        tables.rooms_table,
+                        tables.auditorium_table,
                     ).do,
                 },
 
@@ -413,3 +416,116 @@ class EnlightenmentDashboard(QWidget, Ui_EnlightenmentDashboard):
 
             ],
         )
+    def handle_open_auditoriums(self) -> None:
+        self.main_window.push_screen(
+            "TableViewScreen",
+            title="Аудитории",
+            read=TableViewGenericReader(tables.auditorium_table).do,
+            read_one=TableViewGenericOneReader(tables.auditorium_table).do,
+            create_update=TableViewGenericCreatorAndUpdater(
+                tables.auditorium_table,
+            ).do,
+            delete=TableViewGenericDeleter(tables.auditorium_table).do,
+
+            schema=[
+                {
+                    "name": "name",
+                    "label": "Название",
+                    "primitive": RecordEditorPrimitiveText,
+                }
+            ],
+
+        )
+    def handle_open_history(self) -> None:
+        self.main_window.push_screen(
+            "CalendarViewScreen",
+            title="История бронирования",
+            read=TableViewGenericReader(tables.classes_table).do,
+            read_one=TableViewGenericOneReader(tables.classes_table).do,
+            create_update=TableViewGenericCreatorAndUpdater(
+                tables.classes_table,
+            ).do,
+            delete=TableViewGenericDeleter(tables.classes_table).do,
+            read_only = True,
+            schema=[
+                    {
+                        "name": "name",
+                        "label": "Название",
+                        "primitive": RecordEditorPrimitiveText,
+                    },
+                    {
+                        "name": "date_start",
+                        "label": "Дата начала работы",
+                        "primitive": RecordEditorPrimitiveDate,
+                    },
+                    {
+                        "name": "class_id",
+                        "label": "Вид кружка",
+                        "primitive": RecordEditorPrimitiveRelation,
+                        "read": TableViewGenericReader(tables.classes_type_table).do,
+                        "read_one": TableViewGenericOneReader(
+                            tables.classes_type_table,
+                        ).do,
+                    },
+                    {
+                        "name": "auditorium_id",
+                        "label": "Место проведения",
+                        "primitive": RecordEditorPrimitiveRelation,
+                        "read": TableViewGenericReader(tables.auditorium_table).do,
+                        "read_one": TableViewGenericOneReader(
+                            tables.auditorium_table,
+                        ).do,
+                    },
+
+                    {
+                        "name": "class_day1",
+                        "label": "Первый день",
+                        "primitive": RecordEditorPrimitiveRelation,
+                        "read": TableViewGenericReader(tables.week_days_table).do,
+                        "read_one": TableViewGenericOneReader(
+                            tables.week_days_table,
+                        ).do,
+                        "can_be_empty": True
+                    },
+                    {
+                        "name": "class_day2",
+                        "label": "Второй день",
+                        "primitive": RecordEditorPrimitiveRelation,
+                        "read": TableViewGenericReader(tables.week_days_table).do,
+                        "read_one": TableViewGenericOneReader(
+                            tables.week_days_table,
+                        ).do,
+                        "can_be_empty": True
+                    },
+                    {
+                        "name": "class_day3",
+                        "label": "Третий день",
+                        "primitive": RecordEditorPrimitiveRelation,
+                        "read": TableViewGenericReader(tables.week_days_table).do,
+                        "read_one": TableViewGenericOneReader(
+                            tables.week_days_table,
+                        ).do,
+                        "can_be_empty": True
+                    },
+                    {
+                        "name": "class_start",
+                        "label": "Время начала задания",
+                        "primitive": RecordEditorPrimitiveTime,
+                    },
+                    {
+                        "name": "class_end",
+                        "label": "Время конца задания",
+                        "primitive": RecordEditorPrimitiveTime,
+                    },
+                    {
+                        "name": "teacher_id",
+                        "label": "Преподаватель",
+                        "primitive": RecordEditorPrimitiveRelation,
+                        "read": TableViewGenericReader(tables.teachers_table).do,
+                        "read_one": TableViewGenericOneReader(
+                            tables.teachers_table,
+                        ).do,
+                    },
+
+                ],
+            )
