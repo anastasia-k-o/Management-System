@@ -187,7 +187,6 @@ class Ui_EntertainmentDashboard(object):
         font.setItalic(False)
         font.setWeight(50)
         self.bookingHistory.setFont(font)
-        self.bookingHistory.setStyleSheet("font: 12pt \"Yu Gothic UI\";")
         self.bookingHistory.setFlat(True)
         self.bookingHistory.setObjectName("bookingHistory")
         self.horizontalLayout_4.addWidget(self.bookingHistory)

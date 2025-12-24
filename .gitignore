@@ -5,3 +5,4 @@ build/
 dist/
 main.spec
 gnu_abp_app
+.idea

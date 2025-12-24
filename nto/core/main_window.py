@@ -8,6 +8,7 @@ from nto.forms.entertainment_dashboard import EntertainmentDashboard
 from nto.forms.labor_table_view import LaborTableViewScreen
 from nto.forms.main_screen import MainScreen
 from nto.forms.table_view_screen import TableViewScreen
+from nto.forms.calendar import CalendarViewScreen
 
 screens = {
     "TableViewScreen": TableViewScreen,
@@ -16,6 +17,7 @@ screens = {
     "EducationDashboard": EducationDashboard,
     "EntertainmentDashboard": EntertainmentDashboard,
     "LaborTableViewScreen": LaborTableViewScreen,
+    "CalendarViewScreen": CalendarViewScreen,
 }
 
 

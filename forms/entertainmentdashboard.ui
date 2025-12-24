@@ -352,9 +352,6 @@
            <bold>false</bold>
           </font>
          </property>
-         <property name="styleSheet">
-          <string notr="true">font: 12pt &quot;Yu Gothic UI&quot;;</string>
-         </property>
          <property name="text">
           <string>История бронирования</string>
          </property>
